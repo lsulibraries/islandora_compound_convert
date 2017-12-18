@@ -1,0 +1,7 @@
+name = "Islandora Convert Compound"
+description = "Create a book from a compound object."
+package = Islandora Tools
+dependencies[] = islandora
+dependencies[] = islandora_compound_object
+version = 7.x-dev
+core = 7.x
