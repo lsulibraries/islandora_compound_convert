@@ -8,18 +8,18 @@ function islandora_compound_convert_drush_command() {
 
   $items['islandora_compound_convert_item'] = array(
     'aliases' => array('icnsptest'),
-    'description' => 'Clone an object into another namespace, optionally deleting the original.',
+    'description' => 'Convert a compound object to a book.',
     'drupal dependencies' => array(
       'islandora',
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
     'options' => array(
       'pid' => array(
-        'description' => "object to move to a new namespace.",
+        'description' => "object to convert to book.",
         'value' => 'required',
       ),
       'parent' => array(
-        'description' => 'Collection to clone an item into.',
+        'description' => 'Collection parent.',
         'value' => 'optional',
       ),
     ),
@@ -87,7 +87,7 @@ function islandora_cc_add_page_to_book($src_obj, $book_pid, $cpdParentPid) {
   islandora_paged_content_set_relationship($rels_ext, ISLANDORA_RELS_EXT_URI, 'isPageNumber', (string) $sequence_number, TRUE);
   islandora_paged_content_set_relationship($rels_ext, ISLANDORA_RELS_EXT_URI, 'isSection', '1', TRUE);
   islandora_paged_content_set_relationship($rels_ext, FEDORA_RELS_EXT_URI, 'isMemberOf', $book_pid);
-  islandora_paged_content_set_relationship($rels_ext, ISLANDORA_RELS_EXT_URI, 'hasLanguage', 'no_ocr', TRUE);
+  islandora_paged_content_set_relationship($rels_ext, ISLANDORA_RELS_EXT_URI, 'hasLanguage', 'eng', TRUE);
 
   foreach ($source_object as $dsid => $content) {
     if (!$source_object[$dsid]->content) {
@@ -95,7 +95,7 @@ function islandora_cc_add_page_to_book($src_obj, $book_pid, $cpdParentPid) {
       drush_log($msg, 'warning');
     }
     else {
-      if (in_array($dsid, array('MODS', 'OBJ'))) {
+      if (in_array($dsid, array('MODS', 'OBJ', 'DC', 'TN', 'JPG', 'JP2', 'TECHMD'))) {
         echo "ingesting dsid $dsid\n";
         $page->ingestDatastream($content);
       }
